@@ -1,0 +1,20 @@
+[project]
+name = "homework-django"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "AntonDav23",email = "antonses@icloud.com"}
+]
+
+package-mode = false
+
+requires-python = ">=3.14"
+dependencies = [
+    "django (>=6.1.1,<7.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
