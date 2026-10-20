@@ -26,16 +26,20 @@
                 <div class="card-body">
                     <table class="table table-striped">
                         <tr>
-                            <td class="w-25">Страна</td>
-                            <td>Россия</td>
+                            <td class="w-25">Организация</td>
+                            <td>{{ contact.name }}</td>
                         </tr>
                         <tr>
-                            <td class="w-25">ИНН</td>
-                            <td>7777777777</td>
+                            <td class="w-25">Телефон</td>
+                            <td>{{ contact.phone }}</td>
+                        </tr>
+                        <tr>
+                            <td class="w-25">Почта</td>
+                            <td>{{ contact.email }}</td>
                         </tr>
                         <tr>
                             <td class="w-25">Адрес</td>
-                            <td>Leningrad Oblast, Murino</td>
+                            <td>{{ contact.address }}</td>
                         </tr>
                     </table>
                 </div>
