@@ -22,8 +22,11 @@ class ContactsView(View):
 
     def get(self, request, *args, **kwargs):
         contact = Contact.objects.first()
-        return render(request, self.template_name,{"contact": contact},)
-
+        return render(
+            request,
+            self.template_name,
+            {"contact": contact},
+        )
 
     def post(self, request, *args, **kwargs):
         name = request.POST.get("name")
