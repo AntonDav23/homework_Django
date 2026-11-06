@@ -30,9 +30,15 @@ class ProductForm(forms.ModelForm):
         description = cleaned_data.get("description", "")
         for word in forbidden_words:
             if word in name.lower():
-                self.add_error("name", f"Название содержит запрещённое слово: {word}",)
+                self.add_error(
+                    "name",
+                    f"Название содержит запрещённое слово: {word}",
+                )
             if word in description.lower():
-                self.add_error("description", f"Название содержит запрещённое слово: {word}", )
+                self.add_error(
+                    "description",
+                    f"Название содержит запрещённое слово: {word}",
+                )
         return cleaned_data
 
     def clean_price(self):

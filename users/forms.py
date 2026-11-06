@@ -6,10 +6,10 @@ from django import forms
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = ("email","username", "avatar", "phone", "country")
+        fields = ("email", "username", "avatar", "phone", "country")
 
 
 class CustomUserUpdateForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ("email","username", "avatar", "phone", "country")
+        fields = ("email", "username", "avatar", "phone", "country")

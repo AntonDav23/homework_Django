@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
-class RegisterView (CreateView):
+class RegisterView(CreateView):
     model = CustomUser
     form_class = CustomUserCreationForm
     template_name = "users/register.html"
@@ -18,10 +18,10 @@ class RegisterView (CreateView):
         response = super().form_valid(form)
 
         send_mail(
-        subject="Добро пожаловать в SkyStore!",
-        message=f"Здравствуйте, {self.object.username}! Вы успешно зарегистрировались.",
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[self.object.email],
+            subject="Добро пожаловать в SkyStore!",
+            message=f"Здравствуйте, {self.object.username}! Вы успешно зарегистрировались.",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[self.object.email],
         )
         return response
 

@@ -14,7 +14,8 @@ class CustomUser(AbstractUser):
     phone = PhoneNumberField(
         verbose_name="Телефон",
         blank=True,
-        null=True,)
+        null=True,
+    )
     country = models.CharField(
         max_length=100,
         verbose_name="Страна",

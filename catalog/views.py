@@ -1,4 +1,11 @@
-from django.views.generic import ListView, DetailView, View, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    View,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from catalog.models import Product, Contact
 from catalog.forms import ProductForm
