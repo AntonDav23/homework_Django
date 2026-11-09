@@ -6,7 +6,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from catalog.models import Product, Contact
 from catalog.forms import ProductForm
 from django.shortcuts import render, get_object_or_404
@@ -18,6 +18,11 @@ class HomeView(ListView):
     model = Product
     template_name = "catalog/home.html"
     context_object_name = "products"
+
+    def get_queryset(self):
+        if self.request.user.has_perm("catalog.can_unpublish_product"):
+            return Product.objects.all()
+        return Product.objects.filter(is_published=True)
 
 
 class ProductDetailView(DetailView):
@@ -49,15 +54,35 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     template_name = "catalog/product_form.html"
     success_url = reverse_lazy("catalog:home")
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+
+class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = "catalog/product_form.html"
     success_url = reverse_lazy("catalog:home")
+    permission_required = "catalog.change_product"
+
+    def has_permission(self):
+        product = self.get_object()
+        return (
+            product.owner == self.request.user
+            or self.request.user.has_perm("catalog.can_unpublish_product")
+        )
 
 
-class ProductDeleteView(LoginRequiredMixin, DeleteView):
+class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Product
+    permission_required = "catalog.delete_product"
     template_name = "catalog/product_confirm_delete.html"
     success_url = reverse_lazy("catalog:home")
+
+    def has_permission(self):
+        product = self.get_object()
+        return (
+            product.owner == self.request.user
+            or self.request.user.has_perm("catalog.delete_product")
+        )
