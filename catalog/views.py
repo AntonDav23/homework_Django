@@ -12,6 +12,9 @@ from catalog.forms import ProductForm
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.urls import reverse_lazy
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from catalog.services import get_products_by_category
 
 
 class HomeView(ListView):
@@ -25,6 +28,7 @@ class HomeView(ListView):
         return Product.objects.filter(is_published=True)
 
 
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class ProductDetailView(DetailView):
     model = Product
     template_name = "catalog/product_detail.html"
@@ -68,9 +72,8 @@ class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
 
     def has_permission(self):
         product = self.get_object()
-        return (
-            product.owner == self.request.user
-            or self.request.user.has_perm("catalog.can_unpublish_product")
+        return product.owner == self.request.user or self.request.user.has_perm(
+            "catalog.can_unpublish_product"
         )
 
 
@@ -82,7 +85,18 @@ class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
 
     def has_permission(self):
         product = self.get_object()
-        return (
-            product.owner == self.request.user
-            or self.request.user.has_perm("catalog.delete_product")
+        return product.owner == self.request.user or self.request.user.has_perm(
+            "catalog.delete_product"
         )
+
+
+def products_by_category(request, category_id=None, category_slug=None):
+    products = get_products_by_category(
+        category_id=category_id,
+        category_slug=category_slug,
+    )
+    return render(
+        request,
+        "catalog/products_by_category.html",
+        {"products": products},
+    )
