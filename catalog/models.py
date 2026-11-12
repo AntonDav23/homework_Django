@@ -5,6 +5,7 @@ from django.conf import settings
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название")
     description = models.TextField(verbose_name="Описание")
+    slug = models.SlugField(max_length=150, blank=True, verbose_name="Slug")
 
     def __str__(self):
         return self.name
